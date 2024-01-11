@@ -1,0 +1,457 @@
+import tkinter
+from tkinter import Tk 
+from tkinter.ttk import Label
+import tkinter.messagebox
+import tkdnd as TkinterDnD
+from tkdnd import DND_FILES
+from tkinter import filedialog
+
+class X:
+    def __init__ (self):
+        self.main_window = tkinter.Tk()
+        self.main_window.geometry("800x500")
+        self.main_window.title('The final project')
+        self.top_frame = tkinter.Frame(self.main_window)
+        self.middle_frame = tkinter.Frame(self.main_window)
+        self.bottom_frame = tkinter.Frame(self.main_window)
+        self.lower_frame = tkinter.Frame(self.main_window)
+        self.top_frame.pack()
+        self.middle_frame.pack(anchor = 'c')
+        self.bottom_frame.pack(anchor = 'c')
+        self.lower_frame.pack(side = 'right', pady = 120)
+
+        self.radio_var = tkinter.IntVar()
+        self.radio_var.set(0)
+
+        self.title = tkinter.Label(self.top_frame,
+                               text = 'Numerical Integration', font = ('Times New Roman', 20))
+
+        self.space(self.middle_frame)
+        self.choose = tkinter.Label(self.middle_frame,
+                               text = "Do you want to: ", justify = 'left', 
+                                    font = ('Times New Roman', 12))
+
+        self.b1 = tkinter.Radiobutton(self.bottom_frame, text="Manually enter the known values of the funciton", font = ('Times New Roman', 11),
+                                       variable=self.radio_var, value=1,
+                                      command=self.option1)
+        self.b2 = tkinter.Radiobutton(self.bottom_frame, text='Upload the function from a text file', font = ('Times New Roman', 11),
+                                       variable=self.radio_var, value=2,
+                                      command=self.option2)
+
+        self.quit = tkinter.Button(self.lower_frame, text = 'Quit',
+                                   command = exit)
+        self.quit.pack(side = 'right', padx = 50)        
+        self.title.pack(side = "left", pady = 15)
+        self.choose.pack(side = "left", pady = 10)
+        self.b1.pack(side = "top", anchor = 'w')
+        self.b2.pack(side = "top", anchor = 'w')
+        
+       
+    def option1(self):
+        self.new_frame = self.clear(self.middle_frame, 'w')
+        self.clear(self.bottom_frame,'w')
+        self.clear(self.lower_frame,'w')
+
+        self.bottom1 = tkinter.Frame(self.main_window)
+        self.bottom2 = tkinter.Frame(self.main_window)
+        self.bottom1.pack(anchor = 'w')
+        self.bottom2.pack(anchor = 'w')
+        self.bottom3 = tkinter.Frame(self.main_window)
+        self.bottom3.pack(anchor = 'w')
+        self.bottom4 = tkinter.Frame(self.main_window)
+        self.bottom4.pack(anchor = 'w')
+        self.bottom5 = tkinter.Frame(self.main_window)
+        self.bottom5.pack(anchor = 'w')
+        self.bottom6 = tkinter.Frame(self.main_window)
+        self.bottom6.pack(anchor = 'w')
+        self.bottom7 = tkinter.Frame(self.main_window)
+        self.bottom7.pack(anchor = 'w')
+        self.bottom8 = tkinter.Frame(self.main_window)
+        self.bottom8.pack(anchor = 'c')
+        self.bottom9 = tkinter.Frame(self.main_window)
+        self.bottom9.pack(anchor = 'e')
+        
+        self.title = tkinter.Label(self.new_frame,
+                               text = "Manually entering the values (separate with a space):",
+                                   font = ('Times New Roman', 12))
+
+        self.x_label = tkinter.Label(self.bottom1,
+                               text = "Enter the x values: ",
+                                    font = ('Times New Roman', 12))
+        self.x = tkinter.Entry(self.bottom1, width = 30)
+   
+        self.y_label = tkinter.Label(self.bottom2,
+                               text = "Enter the y values: ",
+                                    font = ('Times New Roman', 12))
+        self.y = tkinter.Entry(self.bottom2, width = 30)
+
+        self.h_label = tkinter.Label(self.bottom3,
+                               text = "Enter the value of h: ",
+                                    font = ('Times New Roman', 12))
+        self.h = tkinter.Entry(self.bottom3, width = 30)
+
+        self.n_label = tkinter.Label(self.bottom4,
+                               text = "Enter the value of n (number of intervals): ",
+                                    font = ('Times New Roman', 12))
+        self.n = tkinter.Entry(self.bottom4, width = 30)
+
+        self.title.pack(pady = 10)
+        self.x_label.pack(side = "left")
+        self.x.pack(side = 'left')
+        self.y_label.pack(side = "left")
+        self.y.pack(side = 'left')
+        self.h_label.pack(side = "left")
+        self.h.pack(side = 'left')
+        self.n_label.pack(side = "left")
+        self.n.pack(side = 'left')
+
+        self.space(self.bottom5)
+
+        self.radio_var = tkinter.IntVar()
+        self.radio_var.set(0)
+
+        self.title2 = tkinter.Label(self.bottom5,
+                               text = f"Which method do you want to use to solve the function:",
+                                   font = ('Times New Roman', 12))
+
+        self.tr = tkinter.Radiobutton(self.bottom6, text="The Trapezodial Rule", font = ('Times New Roman', 11),
+                                       variable=self.radio_var, value=1)
+        self.sr = tkinter.Radiobutton(self.bottom7, text="The Simpson's rule", font = ('Times New Roman', 11),
+                                       variable=self.radio_var, value=2)
+
+        self.tr.pack(side = 'top')
+        self.sr.pack(side = 'top')
+
+        self.space(self.bottom7)
+        
+        self.submit = tkinter.Button(self.bottom8, text = 'Submit', font = ('Times New Roman', 12),
+                                     command = self.get_values)
+        self.submit.pack(side = 'left')
+        self.title2.pack(side = 'left',pady = 10)
+
+        self.go_back = tkinter.Button(self.bottom9, text = 'Return', font = ('Times New Roman', 12),
+                                     command = self.start)
+        self.go_back.pack(side = 'left', padx = 100, pady = 10)
+        
+    
+    def option2(self):
+        self.new_frame = self.clear(self.middle_frame, 'w')
+        self.clear(self.bottom_frame,'w')
+        self.clear(self.lower_frame,'w')
+        
+        self.title = tkinter.Label(self.new_frame,
+                               text = "Click and drop the text file:",
+                                   font = ('Times New Roman', 12))
+        self.title.pack(pady = 10)
+
+        self.bottom1 = tkinter.Frame(self.main_window)
+        self.bottom1.pack(side = 'top')
+        self.left_frame = tkinter.Frame(self.bottom1, width=350, height=300)
+        self.right_frame = tkinter.Frame(self.bottom1, width=350, height=300)
+        self.left_frame.pack(side = 'left', padx = 10)
+        self.right_frame.pack(side = 'right', padx = 10)
+
+        self.down1 = tkinter.Frame(self.main_window)
+        self.down1.pack(anchor = 'c')
+
+        self.down2 = tkinter.Frame(self.main_window)
+        self.down2.pack(anchor = 'e')
+
+        self.file_path=''
+        
+        self.textarea = tkinter.Text(self.left_frame, height=18, width=40)
+        self.textarea.pack(side = 'left')
+        self.textarea.bind("<Button-1>", self.show_text)
+        sbv = tkinter.Scrollbar(self.left_frame, orient=tkinter.VERTICAL)
+        sbv.pack(side='right', fill=tkinter.Y)
+
+        self.textarea.configure(yscrollcommand=sbv.set)
+        sbv.config(command=self.textarea.yview)
+
+        self.r1 = tkinter.Frame(self.right_frame)
+        self.r2 = tkinter.Frame(self.right_frame)
+        self.r3 = tkinter.Frame(self.right_frame)
+        self.r4 = tkinter.Frame(self.right_frame)
+        self.r5 = tkinter.Frame(self.right_frame)
+        self.r1.pack(side = 'top', anchor = 'nw')
+        self.r2.pack(side = 'top', anchor = 'nw')
+        self.r3.pack(side = 'top', anchor = 'nw')
+        self.r4.pack(side = 'top', anchor = 'nw')
+        self.r5.pack(side = 'top', anchor = 'nw')
+
+        self.h_label = tkinter.Label(self.r1,
+                               text = "Enter the value of h: ",
+                                    font = ('Times New Roman', 12))
+        self.h = tkinter.Entry(self.r1, width = 20)
+
+        self.n_label = tkinter.Label(self.r2,
+                               text = "Enter the value of n (number of intervals): ",
+                                    font = ('Times New Roman', 12))
+        self.n = tkinter.Entry(self.r2, width = 20)
+
+
+        self.space(self.r3)
+
+        self.radio_var = tkinter.IntVar()
+        self.radio_var.set(0)
+
+        self.title2 = tkinter.Label(self.r3,
+                               text = f"Which method do you want to use to solve the function:",
+                                   font = ('Times New Roman', 12))
+
+        self.tr = tkinter.Radiobutton(self.r4, text="The Trapezodial Rule", font = ('Times New Roman', 11),
+                                       variable=self.radio_var, value=1)
+        self.sr = tkinter.Radiobutton(self.r5, text="The Simpson's rule", font = ('Times New Roman', 11),
+                                       variable=self.radio_var, value=2)
+
+        self.title2.pack(side = 'left')
+        self.tr.pack(side = 'top')
+        self.sr.pack(side = 'top')
+        self.h_label.pack(side = "left")
+        self.h.pack(side = 'left')
+        self.n_label.pack(side = "left")
+        self.n.pack(side = 'left')
+
+        self.submit = tkinter.Button(self.down1, text = 'Submit', font = ('Times New Roman', 12),
+                                     command = self.get_input)
+        self.submit.pack(side = 'left', padx = 150, pady = 20)
+
+        self.go_back = tkinter.Button(self.down1, text = 'Return', font = ('Times New Roman', 12),
+                                     command = self.start)
+        self.go_back.pack(side = 'right', padx = 50)
+        
+    def show_text(self, event):
+        event.widget.delete("1.0", "end")
+        self.file_path = filedialog.askopenfilename()
+        if self.file_path:
+            if self.file_path.endswith(".txt"):
+                with open(self.file_path, "r") as file:
+                    for line in file:
+                        line = line.strip()
+                        event.widget.insert("end", f"{line}\n")
+        return self.file_path
+        
+    def get_input(self):
+        x = []
+        y = []
+        h = self.h.get()
+        n = self.n.get()
+        radio = self.radio_var.get()
+
+        if self.file_path=='':
+            self.error('Error: please drag and drop the file!')
+            return 0
+        
+        with open(self.file_path, 'r') as file:
+            lines = file.readlines()
+            for line_num, line in enumerate(lines):
+                numbers = line.split()
+                float_numbers = [float(num) for num in numbers]
+                if line_num == 0:
+                    x = float_numbers
+                elif line_num == 1:
+                    y = float_numbers
+
+        if len(x) == 0 or len(y) == 0:
+            self.error('Error: please enter all the values!')
+            return 0
+
+        if len(x) != len(y):
+            self.error('Error: there should be the same number of x and y values!')
+            return 0
+        
+        if h == '' or n == '':
+             self.error('Error: please enter all the values!')
+             return 0
+
+        if radio == 0:
+             self.error('Error: please select the method you want to use!')
+             return 0
+
+        check(x, y, float(h))
+            
+        if radio == 1:  
+            tkinter.messagebox.showinfo('Solution',
+                                        message = f'The integrated value of the provided function is {trapezoidal_rule(x, y, float(h))}')
+        else:
+            tkinter.messagebox.showinfo('Solution', message = f'The integrated value of the provided function is {simpsons_rule(x, y, float(h))}')
+        
+
+    def get_number(self, xa):
+        x_num = xa.get().split()
+        x = [float(num) for num in x_num]
+        return x
+
+    def get_values(self):
+        x = self.get_number(self.x)
+        y = self.get_number(self.y)
+        h = self.h.get()
+        n = self.n.get()
+        radio = self.radio_var.get()
+            
+        if len(x) == 0 or len(y) == 0:
+            self.error('Error: please enter all the values!')
+            return 0
+
+        if len(x) != len(y):
+            self.error('Error: there should be the same number of x and y values!')
+            return 0
+        
+        if h == '':
+             self.error('Error: please enter all the values!')
+             return 0
+        if n == '':
+             self.error('Error: please enter all the values!')
+             return 0
+
+        if radio == 0:
+             self.error('Error: please select the method you want to use!')
+             return 0
+        
+
+        check(x, y, float(h))
+            
+        if radio == 1:
+            tkinter.messagebox.showinfo('Solution',
+                                        message = f'The integrated value of the provided function is {trapezoidal_rule(x, y, float(h))}')
+        else:
+            tkinter.messagebox.showinfo('Solution', message = f'The integrated value of the provided function is {simpsons_rule(x, y, float(h))}')
+            
+
+    def clear(self,xx,an):
+        xx.destroy()
+        novi = tkinter.Frame(self.main_window)
+        novi.pack(anchor = an)
+        return novi
+
+    def destroy(self):
+        children = self.main_window.winfo_children()
+        for child in children:
+            child.destroy()
+
+        self.top_frame = tkinter.Frame(self.main_window)
+        self.middle_frame = tkinter.Frame(self.main_window)
+        self.bottom_frame = tkinter.Frame(self.main_window)
+
+        self.top_frame.pack()
+        self.middle_frame.pack(anchor = 'w')
+        self.bottom_frame.pack(anchor = 'w')
+
+        self.title = tkinter.Label(self.top_frame,
+                               text = 'Numerical Integration', font = ('Times New Roman', 20))
+        self.title.pack(pady = 15)
+            
+        return self.main_window
+    
+    def start(self):
+        children = self.main_window.winfo_children()
+        for child in children:
+            child.destroy()
+
+        self.top_frame = tkinter.Frame(self.main_window)
+        self.middle_frame = tkinter.Frame(self.main_window)
+        self.bottom_frame = tkinter.Frame(self.main_window)
+        self.lower_frame = tkinter.Frame(self.main_window)
+
+        self.top_frame.pack()
+        self.middle_frame.pack(anchor = 'c')
+        self.bottom_frame.pack(anchor = 'c')
+        self.lower_frame.pack(side = 'right', pady = 120)
+
+        self.space(self.middle_frame)
+        self.title = tkinter.Label(self.top_frame,
+                               text = 'Numerical Integration', font = ('Times New Roman', 20))
+        self.title.pack(pady = 15)
+        
+        self.choose = tkinter.Label(self.middle_frame,
+                               text = "Do you want to: ",
+                                    font = ('Times New Roman', 12))
+
+        self.b1 = tkinter.Radiobutton(self.bottom_frame, text="Manually enter the known values of the funciton", font = ('Times New Roman', 11),
+                                       variable=self.radio_var, value=1,
+                                      command=self.option1)
+        self.b2 = tkinter.Radiobutton(self.bottom_frame, text='Upload the function from a text file', font = ('Times New Roman', 11),
+                                       variable=self.radio_var, value=2,
+                                      command=self.option2)
+
+        self.quit = tkinter.Button(self.lower_frame, text = 'Quit',
+                                   command = exit)
+        self.quit.pack(side = 'right', padx = 50)
+        
+        
+        self.title.pack(side = "left", pady = 15)
+        self.choose.pack(side = "left", pady = 10)
+        self.b1.pack(side = "top", anchor = 'w')
+        self.b2.pack(side = "top", anchor = 'w')
+
+    def space(self, window):
+        self.a = tkinter.Label(window, text = "", font = ('Times New Roman', 12))
+        self.a.pack(pady = 5)
+        return self.a
+        
+
+        tkinter.mainloop()
+
+    def error(self, text):
+         tkinter.messagebox.showerror('Error', text)
+         return 1
+
+def trapezoidal_rule(x, y, h):
+    size= len(x)
+    
+    result=0
+    if size%2 == 1:
+        sum1 = y[0] + y[size-1]
+        sum2=0
+        for i in range(1, size - 1):
+            sum2 += y[i]
+        result = sum1+(2*sum2)
+    else:
+        for i in range(size-1):
+            sum1 = (y[i] + y[i+1])*(x[i+1] - x[i])
+            result+=sum1
+        
+    return round((h/2) * result,4)
+
+def simpsons_rule(x, y, h):  
+    size = len(x)
+    suma = y[0] + y[size-1]
+    sum1 = 0
+    sum2 = 0
+    for i in range(1,size-1):
+        if i%2==0:
+            sum1+= y[i]
+        else:
+            sum2 += y[i]
+    result = (suma + (4*sum2) + (2*sum1))
+    
+    return round((h/3) * result,4)
+
+def lagrange_interpolation(interpol, defined, values):
+    size = len(defined)
+    result = 0
+    
+    for i in range(size):
+        y = values[i]
+        for j in range(size):
+            if j != i:
+                y *= (interpol - defined[j]) / (defined[i] - defined[j])
+        result += y
+    
+    return round(result,4)
+
+def check(x,y,h):
+    i = x[0]
+    index = 0
+    while str(round(i,2)) != str(x[len(x)-1]):
+        if round(i,2) not in x:
+            aa = lagrange_interpolation(round(i,2), x, y)
+            x.insert(index,round(i,2))
+            y.insert(index, aa)
+        i+=h
+        index+=1
+    return x,y
+
+    
+if __name__ == '__main__':
+    my_gui = X()
